@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+React Render
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Two phases: Render phase (Slow) and Commit phase (Fast)
 
-## Available Scripts
+# useState & useReducer
 
-In the project directory, you can run:
+The same value
 
-### `npm start`
+- After the initial render => No re-render happens
+- After re-renders => Re-render one more time and then stop re-render
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Becareful when using state with reference value
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Parent and Child
 
-### `npm test`
+- Parent re-renders, all childs re-render recursively
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The same state
 
-### `npm run build`
+- After the initial render => No re-render happens
+- After re-renders => Parent re-renders one more time and child never re-renders
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Same element reference
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    <Parent>
+      <Child />
+    </Parent>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    <div>{children}</div>
 
-### `npm run eject`
+Parent re-renders because of state's changes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+=> Now child is treated as props
+=> Components can change its state but not props
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Parent re-renders because of props
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+=> Child re-renders always
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+/// Notice: Can not pass props as children
 
-## Learn More
+# React memo
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+=> Have the same result as you use the props technique, but now you can pass props to children
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+=> The props technique is actually called the same reference technique
 
-### Code Splitting
+/// Notice: Don't have to use React.memo if you Child has children element
+/// or has time function
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+/// Reference props cause re-render => useMemo and useCallback come into play
